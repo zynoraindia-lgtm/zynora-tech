@@ -1,0 +1,113 @@
+/* =========================================================
+   ZYNORA INTRO  –  opening logo animation
+   Logic lives in components/IntroSplash.jsx
+   ========================================================= */
+#zy-intro {
+  --zy-bg: #050505;    /* site background        */
+  --zy-white: #ffffff; /* main letters           */
+  --zy-c1: #22d3ee;    /* gradient start (cyan)  */
+  --zy-c2: #60a5fa;    /* gradient mid   (blue)  */
+  --zy-c3: #a78bfa;    /* gradient end (violet)  */
+
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#zy-intro .zy-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--zy-bg);
+}
+
+#zy-intro .zy-logo {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+}
+
+#zy-intro .zy-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-zy-logo), Oswald, Impact, 'Arial Narrow', sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--zy-white);
+  letter-spacing: 0;
+}
+
+#zy-intro .zy-word {
+  gap: 0.095em;
+}
+
+#zy-intro .zy-word span,
+#zy-intro .zy-cycle span {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+#zy-intro .zy-word span {
+  display: none;
+}
+
+#zy-intro .zy-grad {
+  background: linear-gradient(100deg, var(--zy-c1) 0%, var(--zy-c2) 55%, var(--zy-c3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+#zy-intro .zy-tag {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-zy-tag), Poppins, Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+#zy-intro .zy-tag span {
+  display: inline-block;
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* hidden helpers used to measure font baselines */
+#zy-intro .zy-probe {
+  position: absolute;
+  visibility: hidden;
+  line-height: 1;
+  white-space: nowrap;
+  font-weight: 600;
+}
+#zy-intro .zy-probe-logo {
+  font-family: var(--font-zy-logo), Oswald, Impact, 'Arial Narrow', sans-serif;
+}
+#zy-intro .zy-probe-tag {
+  font-family: var(--font-zy-tag), Poppins, Arial, sans-serif;
+}
+#zy-intro .zy-probe i {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: baseline;
+}
+
+/* Users who turn off animations never see the overlay — not even before hydration. */
+@media (prefers-reduced-motion: reduce) {
+  #zy-intro {
+    display: none;
+  }
+}

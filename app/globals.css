@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #050505;
+    --surface: #111113;
+    --surface-2: #171719;
+    --text: #ffffff;
+    --muted: #a1a1aa;
+    --accent: #22d3ee;
+    --accent-2: #8b5cf6;
+    --line: rgba(255, 255, 255, 0.08);
+  }
+
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /* Reveal animations translate elements a little before settling; clipping
+       here stops that from ever producing a horizontal scrollbar. */
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(34, 211, 238, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), Inter, sans-serif;
+    letter-spacing: -0.025em;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #050505;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #232326;
+    border-radius: 999px;
+    border: 2px solid #050505;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #34343a;
+  }
+}
+
+@layer components {
+  .section {
+    @apply relative py-24 md:py-32;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.22em] text-muted;
+  }
+
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-8 bg-gradient-to-r from-cyan to-transparent;
+  }
+
+  .h1 {
+    @apply font-display text-[2.6rem] font-semibold leading-[1.04] sm:text-6xl lg:text-7xl xl:text-[5.2rem];
+  }
+
+  .h2 {
+    @apply font-display text-[2rem] font-semibold leading-[1.1] sm:text-[2.6rem] lg:text-[3.25rem];
+  }
+
+  .h3 {
+    @apply font-display text-xl font-semibold leading-snug sm:text-2xl;
+  }
+
+  .lead {
+    @apply text-base leading-relaxed text-muted sm:text-lg;
+  }
+
+  .surface {
+    @apply rounded-2xl border border-white/[0.07] bg-ink-800/70 backdrop-blur-xl;
+  }
+
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-white via-white to-cyan-soft bg-clip-text text-transparent;
+  }
+
+  .accent-text {
+    @apply bg-gradient-to-r from-cyan via-azure-soft to-violet-soft bg-clip-text text-transparent;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-muted transition-colors hover:border-cyan/40 hover:text-white;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-white/10 bg-ink-900/80 px-4 py-3.5 text-sm text-white placeholder:text-zinc-600 transition-colors focus:border-cyan/60 focus:bg-ink-850 focus:outline-none;
+  }
+
+  .field-label {
+    @apply mb-2 block text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-500;
+  }
+}
+
+@layer utilities {
+  .edge-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+  }
+
+  .edge-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
