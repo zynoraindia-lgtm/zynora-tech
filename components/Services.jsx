@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { services } from '@/lib/site';
 import Reveal from './ui/Reveal';
@@ -106,7 +107,24 @@ export default function Services() {
                   className={flip ? 'lg:order-1' : ''}
                 >
                   <div className="transition-transform duration-700 will-change-transform group-hover:-translate-y-1.5">
-                    <ServiceVisual type={service.visual} />
+                    {service.image ? (
+                      <div
+                        className={`relative overflow-hidden rounded-2xl border border-white/[0.07] bg-ink-900 shadow-lift transition-colors duration-500 ${
+                          accentRing[service.accent]
+                        }`}
+                      >
+                        <Image
+                          src={service.image}
+                          alt={service.imageAlt || `${service.title} showcase`}
+                          width={1920}
+                          height={1080}
+                          sizes="(min-width: 1360px) 608px, (min-width: 1024px) 46vw, 100vw"
+                          className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                        />
+                      </div>
+                    ) : (
+                      <ServiceVisual type={service.visual} />
+                    )}
                   </div>
                 </Reveal>
               </article>

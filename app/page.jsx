@@ -8,7 +8,6 @@ import WhyZynora from '@/components/WhyZynora';
 import TechStack from '@/components/TechStack';
 import Industries from '@/components/Industries';
 import Process from '@/components/Process';
-import CaseStudies from '@/components/CaseStudies';
 import Architecture from '@/components/Architecture';
 import MiddleEast from '@/components/MiddleEast';
 import FAQ from '@/components/FAQ';
@@ -22,18 +21,32 @@ export default function HomePage() {
       <CursorGlow />
       <Navbar />
       <main id="main">
+        {/* Sections follow the navigation order: Home → About → Services →
+            Solutions → Industries → Contact. Supporting sections sit inside
+            the group they belong to, so the active nav item stays correct. */}
+
+        {/* Home */}
         <Hero />
-        <Clients />
-        <GlobalPresence />
-        <Services />
-        <Transformation />
+
+        {/* About */}
         <WhyZynora />
+        <GlobalPresence />
+        <Clients />
+
+        {/* Services */}
+        <Services />
         <TechStack />
-        <Industries />
-        <Process />
-        <CaseStudies />
+
+        {/* Solutions */}
+        <Transformation />
         <Architecture />
+        <Process />
+
+        {/* Industries */}
+        <Industries />
         <MiddleEast />
+
+        {/* Contact */}
         <FAQ />
         <Contact />
       </main>

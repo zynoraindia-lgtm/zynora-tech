@@ -46,12 +46,21 @@ components.
 
 Things to update before going live:
 
-1. **`caseStudies`** — every entry is a placeholder. Replace with confirmed projects only.
-   No client names, metrics or results are invented anywhere in this build.
+1. **`caseStudies`** — the Work / case-studies section is currently switched off (removed from
+   `app/page.jsx` and the navigation). `components/CaseStudies.jsx` and the data are kept, so it
+   can be re-added later; every entry is a placeholder, so replace them with confirmed projects first.
 2. **`techStack`** — a reasonable starting list. Trim it to what Zynora actually uses.
 3. **`company.url`** — currently `https://zynoratechnology.com`; set the real domain so
    metadata and structured data resolve correctly.
 4. **Privacy Policy / Terms** links in `components/Footer.jsx` point to `#`.
+
+### Service images
+
+Each entry in `services` (in `lib/site.js`) can carry an `image` and `imageAlt`. When set,
+the Services section shows that picture (from `public/services/`, 1920×1080 WebP) instead of
+the drawn interface visual (all six services have one now); an entry without `image` falls back
+to its drawn visual in `components/ServiceVisual.jsx`.
+To add or swap one, drop a 16:9 image into `public/services/` and point `image` at it.
 
 ## Opening intro
 
@@ -96,7 +105,7 @@ components/
   IntroSplash (opening logo animation + .css),
   Navbar, Hero, HeroVisual (canvas), GlobalPresence, WorldMap,
   Services, ServiceVisual, Transformation, WhyZynora, TechStack,
-  Industries, Process, CaseStudies, Architecture, MiddleEast,
+  Industries, Process, CaseStudies (not shown), Architecture, MiddleEast,
   FAQ, Contact, ContactForm, Footer
   ui/               Button (magnetic), Reveal, SectionHeader, Counter, CursorGlow
 lib/
@@ -106,6 +115,7 @@ lib/
 public/
   zynora-mark.png   logo, background removed
   zynora-logo.png   full logo with light tagline for dark backgrounds
+  services/         cover images for the Services section (1920×1080 WebP)
 ```
 
 ## Design system

@@ -127,7 +127,7 @@ export default function Hero() {
       </div>
 
       <motion.a
-        href="#presence"
+        href="#why"
         aria-label="Scroll to next section"
         initial={{ opacity: 0 }}
         animate={ready ? { opacity: 1 } : undefined}
