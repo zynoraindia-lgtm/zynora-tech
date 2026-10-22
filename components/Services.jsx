@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { services } from '@/lib/site';
 import Reveal from './ui/Reveal';
@@ -44,7 +45,8 @@ export default function Services() {
             return (
               <article
                 key={service.id}
-                className="group grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
+                id={service.id}
+                className="group grid scroll-mt-28 items-center gap-10 lg:grid-cols-2 lg:gap-16"
               >
                 <Reveal
                   direction={flip ? 'left' : 'right'}
@@ -89,8 +91,8 @@ export default function Services() {
                     ))}
                   </ul>
 
-                  <a
-                    href="#contact"
+                  <Link
+                    href="/contact"
                     className="group/cta mt-9 inline-flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-cyan"
                   >
                     {service.cta}
@@ -98,7 +100,7 @@ export default function Services() {
                       className="h-3.5 w-3.5 transition-transform group-hover/cta:translate-x-1"
                       strokeWidth={1.8}
                     />
-                  </a>
+                  </Link>
                 </Reveal>
 
                 <Reveal

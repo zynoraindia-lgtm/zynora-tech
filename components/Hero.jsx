@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { company } from '@/lib/site';
@@ -95,11 +96,11 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.68 }}
             className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
-            <Button href="#contact" variant="accent" size="lg">
+            <Button href="/contact" variant="accent" size="lg">
               Start a Project
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button href="#services" variant="outline" size="lg">
+            <Button href="/services" variant="outline" size="lg">
               Explore Our Services
             </Button>
           </motion.div>
@@ -110,13 +111,13 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.85 }}
             className="mt-12"
           >
-            <a
-              href="#presence"
+            <Link
+              href="/about#presence"
               className="group inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-zinc-500 transition-colors hover:text-zinc-300"
             >
               <span className="h-px w-10 bg-gradient-to-r from-cyan/70 to-transparent" />
               Serving India • UAE • Global Businesses
-            </a>
+            </Link>
           </motion.div>
         </div>
 
@@ -127,7 +128,7 @@ export default function Hero() {
       </div>
 
       <motion.a
-        href="#why"
+        href="#clients"
         aria-label="Scroll to next section"
         initial={{ opacity: 0 }}
         animate={ready ? { opacity: 1 } : undefined}

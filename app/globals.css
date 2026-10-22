@@ -163,3 +163,15 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Inner pages (About, Services, Solutions, Industries, Contact): the first section sits
+   closer to the fixed navbar (64px / 72px tall), leaving 48px / 72px of space below it.
+   Change these two values to move the top content up or down on all inner pages. */
+.page-top > section:first-of-type {
+  padding-top: 7rem;
+}
+@media (min-width: 768px) {
+  .page-top > section:first-of-type {
+    padding-top: 9rem;
+  }
+}

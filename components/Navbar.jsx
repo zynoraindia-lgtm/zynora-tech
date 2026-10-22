@@ -2,15 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import { company, nav } from '@/lib/site';
 import Button from './ui/Button';
 
+const MotionLink = motion.create(Link);
+
+/** Home is active only on "/"; other items stay active on their sub-paths too. */
+function isActive(pathname, href) {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('');
+  const pathname = usePathname() || '/';
 
   useEffect(() => {
     function onScroll() {
@@ -21,25 +31,10 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Highlight the section currently in view.
+  // Close the mobile menu whenever the page changes.
   useEffect(() => {
-    const ids = nav.map((n) => n.href.replace('#', ''));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-        });
-      },
-      { rootMargin: '-45% 0px -50% 0px' }
-    );
-
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+    setOpen(false);
+  }, [pathname]);
 
   // Lock scroll behind the mobile menu.
   useEffect(() => {
@@ -67,8 +62,8 @@ export default function Navbar() {
         }`}
       >
         <div className="container flex h-16 items-center justify-between gap-6 md:h-[72px]">
-          <a
-            href="#top"
+          <Link
+            href="/"
             className="group flex w-fit flex-col items-stretch"
             aria-label={`${company.shortName} home`}
           >
@@ -87,34 +82,38 @@ export default function Navbar() {
             >
               Technology Private Limited
             </span>
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {nav.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-                  active === item.href
-                    ? 'text-white'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                {item.label}
-                {active === item.href ? (
-                  <motion.span
-                    layoutId="nav-active"
-                    className="absolute inset-0 -z-10 rounded-full border border-white/10 bg-white/[0.05]"
-                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                  />
-                ) : null}
-              </a>
-            ))}
+            {nav.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
+                    active
+                      ? 'text-white'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  {item.label}
+                  {active ? (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 -z-10 rounded-full border border-white/10 bg-white/[0.05]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  ) : null}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-2">
             <Button
-              href="#contact"
+              href="/contact"
               variant="accent"
               size="sm"
               className="hidden sm:inline-flex"
@@ -167,24 +166,33 @@ export default function Navbar() {
             </div>
 
             <nav className="container mt-6 flex flex-col" aria-label="Mobile">
-              {nav.map((item, i) => (
-                <motion.a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 + i * 0.05, duration: 0.35 }}
-                  className="flex items-center justify-between border-b border-white/[0.07] py-5 font-display text-[1.6rem] font-medium text-white"
-                >
-                  {item.label}
-                  <ArrowRight className="h-4 w-4 text-zinc-600" strokeWidth={1.6} />
-                </motion.a>
-              ))}
+              {nav.map((item, i) => {
+                const active = isActive(pathname, item.href);
+                return (
+                  <MotionLink
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.35 }}
+                    className={`flex items-center justify-between border-b border-white/[0.07] py-5 font-display text-[1.6rem] font-medium ${
+                      active ? 'text-cyan' : 'text-white'
+                    }`}
+                  >
+                    {item.label}
+                    <ArrowRight
+                      className={`h-4 w-4 ${active ? 'text-cyan' : 'text-zinc-600'}`}
+                      strokeWidth={1.6}
+                    />
+                  </MotionLink>
+                );
+              })}
             </nav>
 
             <div className="container mb-10 mt-8 space-y-4">
-              <Button href="#contact" variant="accent" size="lg" className="w-full" onClick={() => setOpen(false)}>
+              <Button href="/contact" variant="accent" size="lg" className="w-full" onClick={() => setOpen(false)}>
                 Start a Project
                 <ArrowRight className="h-4 w-4" />
               </Button>

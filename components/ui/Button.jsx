@@ -1,7 +1,15 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
+
+const MotionLink = motion.create(Link);
+
+/** Site routes like /contact go through Next.js Link; #anchors, tel:, mailto: and external URLs stay plain links. */
+function isRoute(href) {
+  return typeof href === 'string' && href.startsWith('/') && !href.startsWith('//');
+}
 
 /**
  * Magnetic button — the element leans toward the cursor on hover.
@@ -52,7 +60,7 @@ export default function Button({
     setOffset({ x: 0, y: 0 });
   }
 
-  const Tag = href ? motion.a : motion.button;
+  const Tag = href ? (isRoute(href) ? MotionLink : motion.a) : motion.button;
 
   return (
     <Tag

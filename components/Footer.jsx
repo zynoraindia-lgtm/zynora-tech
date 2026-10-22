@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
 import { company, services } from '@/lib/site';
 
@@ -8,22 +9,23 @@ const columns = [
   {
     title: 'Company',
     links: [
-      { label: 'About', href: '#why' },
-      { label: 'Services', href: '#services' },
-      { label: 'Solutions', href: '#transformation' },
-      { label: 'Industries', href: '#industries' },
-      { label: 'Contact', href: '#contact' },
+      { label: 'Home', href: '/' },
+      { label: 'About', href: '/about' },
+      { label: 'Services', href: '/services' },
+      { label: 'Solutions', href: '/solutions' },
+      { label: 'Industries', href: '/industries' },
+      { label: 'Contact', href: '/contact' },
     ],
   },
   {
     title: 'Services',
-    links: services.map((s) => ({ label: s.title, href: '#services' })),
+    links: services.map((s) => ({ label: s.title, href: `/services#${s.id}` })),
   },
   {
     title: 'Global',
     links: [
-      { label: 'India', href: '#middle-east' },
-      { label: 'UAE', href: '#middle-east' },
+      { label: 'India', href: '/about#presence' },
+      { label: 'UAE', href: '/industries#middle-east' },
     ],
   },
 ];
@@ -85,13 +87,13 @@ export default function Footer() {
               <ul className="mt-6 space-y-3.5">
                 {col.links.map((link, i) => (
                   <li key={`${col.title}-${link.label}-${i}`}>
-                    <a
+                    <Link
                       href={link.href}
                       className="group inline-flex items-start gap-1.5 text-[13.5px] leading-snug text-zinc-400 transition-colors hover:text-white"
                     >
                       <span>{link.label}</span>
                       <ArrowUpRight className="mt-0.5 h-3 w-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

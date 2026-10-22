@@ -4,20 +4,20 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Canvas visualisation of a connected digital ecosystem:
- * Website → Mobile → Commerce → ERP → CRM → Business Data, all orbiting a
+ * Website → Mobile → Commerce → ERP → CRM, all orbiting a
  * central Zynora core with data pulses travelling along the links.
  *
  * Canvas (not WebGL) keeps the payload small and the frame cost low, which
  * matters more on a corporate hero than a full 3D scene would.
  */
 
+// Five nodes spaced evenly around the core (360° / 5 = 72° apart).
 const NODES = [
   { label: 'Website', angle: -90, radius: 0.78 },
-  { label: 'Mobile App', angle: -30, radius: 0.92 },
-  { label: 'E-Commerce', angle: 30, radius: 0.78 },
-  { label: 'ERP', angle: 90, radius: 0.92 },
-  { label: 'CRM', angle: 150, radius: 0.78 },
-  { label: 'Data', angle: 210, radius: 0.92 },
+  { label: 'Mobile App', angle: -18, radius: 0.92 },
+  { label: 'E-Commerce', angle: 54, radius: 0.78 },
+  { label: 'ERP', angle: 126, radius: 0.92 },
+  { label: 'CRM', angle: 198, radius: 0.78 },
 ];
 
 const ACCENTS = [
@@ -26,7 +26,6 @@ const ACCENTS = [
   'rgba(139,92,246,',
   'rgba(34,211,238,',
   'rgba(96,165,250,',
-  'rgba(167,139,250,',
 ];
 
 export default function HeroVisual() {

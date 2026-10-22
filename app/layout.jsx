@@ -2,6 +2,9 @@ import { Inter, Sora } from 'next/font/google';
 import './globals.css';
 import { company } from '@/lib/site';
 import IntroSplash from '@/components/IntroSplash';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import CursorGlow from '@/components/ui/CursorGlow';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -89,7 +92,10 @@ export default function RootLayout({ children }) {
         >
           Skip to content
         </a>
-        {children}
+        <CursorGlow />
+        <Navbar />
+        <main id="main">{children}</main>
+        <Footer />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

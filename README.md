@@ -38,6 +38,24 @@ The hero "digital ecosystem" is drawn on a 2D canvas rather than in Three.js. It
 same connected-nodes-and-data-pulses effect for a fraction of the payload and frame cost,
 which matters more on a corporate landing page than a full 3D scene would.
 
+## Pages
+
+Each item in the navigation is its own page (Next.js App Router):
+
+| Route         | File                       | Sections                                                    |
+| ------------- | -------------------------- | ----------------------------------------------------------- |
+| `/`           | `app/page.jsx`             | Hero, Trusted By (client logos), Explore cards, call-to-action |
+| `/about`      | `app/about/page.jsx`       | Why Zynora, Global Presence, Trusted By                     |
+| `/services`   | `app/services/page.jsx`    | Services (six service blocks), Technology Ecosystem         |
+| `/solutions`  | `app/solutions/page.jsx`   | Digital Transformation, Enterprise Engineering, Process     |
+| `/industries` | `app/industries/page.jsx`  | Industries, Regional Focus (Middle East)                    |
+| `/contact`    | `app/contact/page.jsx`     | Contact + enquiry form, FAQ                                 |
+
+The navbar, footer, cursor glow and opening intro live in `app/layout.jsx`, so they are shared
+by every page. Menu items come from `nav` in `lib/site.js`; the active item is worked out from
+the current URL. The Home page's "Explore" cards read their text from `highlights` in
+`lib/site.js`. Individual services can be linked directly, e.g. `/services#erp`.
+
 ## Editing content
 
 **Almost all copy lives in `lib/site.js`.** Company details, services, industries, process
@@ -98,11 +116,13 @@ Formspree or EmailJS both drop in at the same point with no other changes.
 
 ```
 app/
-  layout.jsx        fonts, metadata, JSON-LD organisation schema, opening intro
-  page.jsx          section order
+  layout.jsx        fonts, metadata, JSON-LD, navbar, footer, opening intro
+  page.jsx          Home page
+  about/ services/ solutions/ industries/ contact/   one folder per page
+  not-found.jsx     404 page
   globals.css       design tokens + component classes
 components/
-  IntroSplash (opening logo animation + .css),
+  IntroSplash (opening logo animation + .css), Highlights (Home cards), CtaBand,
   Navbar, Hero, HeroVisual (canvas), GlobalPresence, WorldMap,
   Services, ServiceVisual, Transformation, WhyZynora, TechStack,
   Industries, Process, CaseStudies (not shown), Architecture, MiddleEast,
