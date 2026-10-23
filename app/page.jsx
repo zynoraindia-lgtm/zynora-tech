@@ -1,5 +1,4 @@
 import Hero from '@/components/Hero';
-import Clients from '@/components/Clients';
 import Highlights from '@/components/Highlights';
 import CtaBand from '@/components/CtaBand';
 
@@ -8,7 +7,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Clients />
       <Highlights />
       <CtaBand />
     </>

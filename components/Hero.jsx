@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { company } from '@/lib/site';
 import Button from './ui/Button';
 import { useIntroReady } from '@/lib/intro';
@@ -126,18 +126,6 @@ export default function Hero() {
           <HeroVisual />
         </div>
       </div>
-
-      <motion.a
-        href="#clients"
-        aria-label="Scroll to next section"
-        initial={{ opacity: 0 }}
-        animate={ready ? { opacity: 1 } : undefined}
-        transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-zinc-600 transition-colors hover:text-zinc-300 lg:flex"
-      >
-        <span className="text-[10px] uppercase tracking-[0.25em]">Scroll</span>
-        <ArrowDown className="h-3.5 w-3.5 animate-bounce" strokeWidth={1.5} />
-      </motion.a>
     </section>
   );
 }

@@ -4,8 +4,9 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Canvas visualisation of a connected digital ecosystem:
- * Website → Mobile → Commerce → ERP → CRM, all orbiting a
- * central Zynora core with data pulses travelling along the links.
+ * Website → Mobile → Commerce → ERP → CRM, all orbiting the Zynora logo
+ * (public/zynora-mark.png) with data pulses travelling along the links.
+ * Labels use the site's display font (Sora, via the --font-display variable).
  *
  * Canvas (not WebGL) keeps the payload small and the frame cost low, which
  * matters more on a corporate hero than a full 3D scene would.
@@ -28,6 +29,78 @@ const ACCENTS = [
   'rgba(96,165,250,',
 ];
 
+// Centre of the animation: the Zynora wordmark.
+const LOGO_SRC = '/zynora-mark.png';
+
+/** Rounded-rectangle path (ctx.roundRect isn't in every browser yet). */
+function roundedRect(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+/** Downscale an image in halving steps so the logo stays crisp at small sizes. */
+function scaleImage(img, targetW) {
+  let src = img;
+  let sw = img.naturalWidth;
+  let sh = img.naturalHeight;
+  const tw = Math.max(1, Math.round(targetW));
+  const th = Math.max(1, Math.round((tw * sh) / sw));
+  while (sw / 2 >= tw) {
+    const step = document.createElement('canvas');
+    step.width = Math.round(sw / 2);
+    step.height = Math.round(sh / 2);
+    const g = step.getContext('2d');
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(src, 0, 0, step.width, step.height);
+    src = step;
+    sw = step.width;
+    sh = step.height;
+  }
+  const out = document.createElement('canvas');
+  out.width = tw;
+  out.height = th;
+  const g = out.getContext('2d');
+  g.imageSmoothingQuality = 'high';
+  g.drawImage(src, 0, 0, tw, th);
+  return out;
+}
+
+/**
+ * Size and shape of the ecosystem for a given canvas. Desktop uses a wide, flat
+ * orbit; phone and tablet canvases have spare height, so the orbit is taller there
+ * and the logo smaller, which keeps the labels clear of the centre badge.
+ */
+function getLayout(width, height) {
+  const small = width < 600;
+  if (small) {
+    const scale = Math.min(width * 0.4, height * 0.44);
+    return {
+      small,
+      scale,
+      stretchX: 0.95,
+      stretchY: 0.85,
+      logoW: Math.round(Math.max(64, Math.min(84, scale * 0.53))),
+    };
+  }
+  const scale = Math.min(width, height * 1.7) * 0.31;
+  // Tablets show a short (300–380px) strip under the hero copy: a slightly
+  // taller orbit and smaller logo there keep the labels off the badge.
+  const compact = height < 500;
+  return {
+    small,
+    scale,
+    stretchX: 1.06,
+    stretchY: compact ? 0.7 : 0.62,
+    logoW: Math.round(Math.max(92, Math.min(170, scale * (compact ? 0.55 : 0.62)))),
+  };
+}
+
 export default function HeroVisual() {
   const canvasRef = useRef(null);
   const pointer = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
@@ -47,6 +120,23 @@ export default function HeroVisual() {
     let t = 0;
     let particles = [];
 
+    // Label font: the site's display font (Sora, loaded by next/font in app/layout.jsx).
+    const displayFont =
+      getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() ||
+      'Sora';
+    const hasLetterSpacing = 'letterSpacing' in ctx;
+
+    // Logo for the centre, pre-scaled to its drawn size whenever the canvas resizes.
+    const logo = new Image();
+    let logoW = 0;
+    let logoCache = null;
+    function buildLogo() {
+      if (!logo.complete || !logo.naturalWidth || !logoW) return;
+      logoCache = scaleImage(logo, logoW * dpr);
+    }
+    logo.onload = buildLogo;
+    logo.src = LOGO_SRC;
+
     function resize() {
       const rect = canvas.getBoundingClientRect();
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -55,6 +145,10 @@ export default function HeroVisual() {
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Logo width follows the ecosystem size: ~160px on desktop, ~70px on phones.
+      logoW = getLayout(width, height).logoW;
+      buildLogo();
 
       const count = width < 600 ? 26 : 54;
       particles = Array.from({ length: count }, () => ({
@@ -87,7 +181,7 @@ export default function HeroVisual() {
       pointer.current.ty = 0;
     }
 
-    function nodePositions(cx, cy, scale, tilt) {
+    function nodePositions(cx, cy, { scale, stretchX, stretchY }, tilt) {
       return NODES.map((node, i) => {
         const wobble = reduced ? 0 : Math.sin(t * 0.0009 + i * 1.1) * 8;
         const rad = ((node.angle + (reduced ? 0 : t * 0.006)) * Math.PI) / 180;
@@ -95,8 +189,8 @@ export default function HeroVisual() {
         return {
           ...node,
           i,
-          x: cx + Math.cos(rad) * r * 1.06 + tilt.x * (14 + i * 2),
-          y: cy + Math.sin(rad) * r * 0.62 + tilt.y * (10 + i * 2),
+          x: cx + Math.cos(rad) * r * stretchX + tilt.x * (14 + i * 2),
+          y: cy + Math.sin(rad) * r * stretchY + tilt.y * (10 + i * 2),
         };
       });
     }
@@ -118,7 +212,8 @@ export default function HeroVisual() {
 
       const cx = width / 2 + tilt.x * 16;
       const cy = height / 2 + tilt.y * 12;
-      const scale = Math.min(width, height * 1.7) * 0.31;
+      const layout = getLayout(width, height);
+      const { scale, stretchX, stretchY } = layout;
 
       // Ambient particles.
       particles.forEach((p) => {
@@ -136,17 +231,28 @@ export default function HeroVisual() {
         ctx.fill();
       });
 
-      const nodes = nodePositions(cx, cy, scale, tilt);
+      const nodes = nodePositions(cx, cy, layout, tilt);
+
+      // Soft glow behind the logo.
+      const glowR = Math.max(90, scale * 0.62);
+      const coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+      coreGlow.addColorStop(0, 'rgba(34,211,238,0.26)');
+      coreGlow.addColorStop(0.5, 'rgba(59,130,246,0.09)');
+      coreGlow.addColorStop(1, 'rgba(5,5,5,0)');
+      ctx.beginPath();
+      ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
+      ctx.fillStyle = coreGlow;
+      ctx.fill();
 
       // Ring behind the ecosystem.
       ctx.beginPath();
-      ctx.ellipse(cx, cy, scale * 0.95, scale * 0.58, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy, scale * stretchX * 0.9, scale * stretchY * 0.94, 0, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(255,255,255,0.055)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.ellipse(cx, cy, scale * 1.28, scale * 0.78, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy, scale * stretchX * 1.21, scale * stretchY * 1.26, 0, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(255,255,255,0.03)';
       ctx.stroke();
 
@@ -216,45 +322,87 @@ export default function HeroVisual() {
         ctx.fillStyle = `${accent}1)`;
         ctx.fill();
 
-        ctx.font =
-          '500 10.5px ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.62)';
-        ctx.textAlign = 'center';
-        ctx.letterSpacing = '1.4px';
-        ctx.fillText(node.label.toUpperCase(), node.x, node.y - 17);
+        // Label: a small pill in the node's colour, text in Sora with a gradient.
+        const { small } = layout;
+        const size = small ? 9 : 12;
+        const spacing = small ? 1.4 : 2.2;
+        const text = node.label.toUpperCase();
+        ctx.font = `600 ${size}px ${displayFont}, sans-serif`;
+        if (hasLetterSpacing) ctx.letterSpacing = `${spacing}px`;
+        // measureText includes the spacing after the last letter; drop it so the text is centred.
+        const textW = ctx.measureText(text).width - (hasLetterSpacing ? spacing : 0);
+        const padX = small ? 8 : 11;
+        const pillH = size + (small ? 9 : 12);
+        const pillW = textW + padX * 2;
+        const lx = node.x - pillW / 2;
+        const ly = node.y - (small ? 16 : 20) - pillH;
+
+        roundedRect(ctx, lx, ly, pillW, pillH, pillH / 2);
+        ctx.fillStyle = 'rgba(9,10,14,0.8)';
+        ctx.fill();
+        ctx.strokeStyle = `${accent}${0.3 + pulse * 0.25})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        const textGrad = ctx.createLinearGradient(lx + padX, 0, lx + padX + textW, 0);
+        textGrad.addColorStop(0, 'rgba(255,255,255,0.97)');
+        textGrad.addColorStop(1, `${accent}1)`);
+        ctx.fillStyle = textGrad;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, lx + padX, ly + pillH / 2 + 0.5);
       });
 
-      // Core.
-      const coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 78);
-      coreGlow.addColorStop(0, 'rgba(34,211,238,0.30)');
-      coreGlow.addColorStop(0.5, 'rgba(59,130,246,0.10)');
-      coreGlow.addColorStop(1, 'rgba(5,5,5,0)');
-      ctx.beginPath();
-      ctx.arc(cx, cy, 78, 0, Math.PI * 2);
-      ctx.fillStyle = coreGlow;
-      ctx.fill();
+      // Core: the Zynora logo on a glowing glass plate.
+      const lw = logoW || 120;
+      const lh = logoCache ? (lw * logoCache.height) / logoCache.width : lw * 0.21;
+      const plateX = lw * 0.13;
+      const plateY = lw * 0.1;
+      const pw = lw + plateX * 2;
+      const ph = lh + plateY * 2;
+      const bob = reduced ? 0 : Math.sin(t * 0.0012) * 2.5;
+      const px0 = cx - pw / 2;
+      const py0 = cy - ph / 2 + bob;
+      const corner = ph * 0.32;
 
-      ctx.beginPath();
-      ctx.arc(cx, cy, 15, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(6,6,8,1)';
+      // Ripple expanding outward from the plate.
+      if (!reduced) {
+        const k = (t * 0.0005) % 1;
+        const grow = k * 30;
+        roundedRect(ctx, px0 - grow, py0 - grow, pw + grow * 2, ph + grow * 2, corner + grow);
+        ctx.strokeStyle = `rgba(34,211,238,${0.35 * (1 - k)})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(34,211,238,0.45)';
+      ctx.shadowBlur = 28;
+      roundedRect(ctx, px0, py0, pw, ph, corner);
+      ctx.fillStyle = 'rgba(8,9,12,0.92)';
       ctx.fill();
-      ctx.strokeStyle = 'rgba(34,211,238,0.75)';
-      ctx.lineWidth = 1.5;
+      ctx.restore();
+
+      const border = ctx.createLinearGradient(px0, py0, px0 + pw, py0 + ph);
+      border.addColorStop(0, 'rgba(34,211,238,0.85)');
+      border.addColorStop(0.5, 'rgba(59,130,246,0.5)');
+      border.addColorStop(1, 'rgba(139,92,246,0.85)');
+      roundedRect(ctx, px0, py0, pw, ph, corner);
+      ctx.strokeStyle = border;
+      ctx.lineWidth = 1.4;
       ctx.stroke();
 
-      const ripple = reduced ? 20 : 15 + ((t * 0.02) % 40);
-      ctx.beginPath();
-      ctx.arc(cx, cy, ripple, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(34,211,238,${Math.max(0, 0.32 - (ripple - 15) / 130)})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      ctx.font =
-        '600 9px ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      ctx.textAlign = 'center';
-      ctx.letterSpacing = '2px';
-      ctx.fillText('ZYNORA', cx, cy + 3);
+      if (logoCache) {
+        ctx.drawImage(logoCache, px0 + plateX, py0 + plateY, lw, lh);
+      } else {
+        // Until the logo image has loaded, show the name in the display font.
+        ctx.font = `700 ${Math.round(lw * 0.16)}px ${displayFont}, sans-serif`;
+        if (hasLetterSpacing) ctx.letterSpacing = '3px';
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('ZYNORA', cx, py0 + ph / 2);
+      }
 
       raf = requestAnimationFrame(draw);
     }
@@ -269,6 +417,7 @@ export default function HeroVisual() {
 
     return () => {
       cancelAnimationFrame(raf);
+      logo.onload = null;
       ro.disconnect();
       window.removeEventListener('pointermove', onPointer);
       canvas.removeEventListener('pointerleave', onLeave);

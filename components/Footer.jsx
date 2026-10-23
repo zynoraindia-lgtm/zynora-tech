@@ -104,15 +104,17 @@ export default function Footer() {
           <div>
             <ColumnHeading>Contact</ColumnHeading>
             <ul className="mt-6 space-y-4 text-[13.5px] text-zinc-400">
-              <li>
-                <a
-                  href={`tel:${company.phoneIntl}`}
-                  className="group flex items-start gap-2.5 transition-colors hover:text-white"
-                >
-                  <Phone className="mt-[3px] h-3.5 w-3.5 shrink-0 text-cyan" strokeWidth={1.6} />
-                  <span className="leading-snug">{company.phone}</span>
-                </a>
-              </li>
+              {company.phones.map((p) => (
+                <li key={p.intl}>
+                  <a
+                    href={`tel:${p.intl}`}
+                    className="group flex items-start gap-2.5 transition-colors hover:text-white"
+                  >
+                    <Phone className="mt-[3px] h-3.5 w-3.5 shrink-0 text-cyan" strokeWidth={1.6} />
+                    <span className="leading-snug">{p.display}</span>
+                  </a>
+                </li>
+              ))}
               <li>
                 <a
                   href={`mailto:${company.email}`}

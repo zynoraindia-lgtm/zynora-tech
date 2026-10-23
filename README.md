@@ -44,11 +44,11 @@ Each item in the navigation is its own page (Next.js App Router):
 
 | Route         | File                       | Sections                                                    |
 | ------------- | -------------------------- | ----------------------------------------------------------- |
-| `/`           | `app/page.jsx`             | Hero, Trusted By (client logos), Explore cards, call-to-action |
-| `/about`      | `app/about/page.jsx`       | Why Zynora, Global Presence, Trusted By                     |
+| `/`           | `app/page.jsx`             | Hero, Explore cards, call-to-action                         |
+| `/about`      | `app/about/page.jsx`       | Why Zynora, Global Presence                                 |
 | `/services`   | `app/services/page.jsx`    | Services (six service blocks), Technology Ecosystem         |
 | `/solutions`  | `app/solutions/page.jsx`   | Digital Transformation, Enterprise Engineering, Process     |
-| `/industries` | `app/industries/page.jsx`  | Industries, Regional Focus (Middle East)                    |
+| `/industries` | `app/industries/page.jsx`  | Industries, Our Valuable Clients (client logos), Regional Focus (Middle East) |
 | `/contact`    | `app/contact/page.jsx`     | Contact + enquiry form, FAQ                                 |
 
 The navbar, footer, cursor glow and opening intro live in `app/layout.jsx`, so they are shared

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { techStack } from '@/lib/site';
 import Reveal from './ui/Reveal';
 import SectionHeader from './ui/SectionHeader';
+import Logo3D from './ui/Logo3D';
 
 const marquee = techStack.flatMap((g) => g.items);
 
@@ -47,27 +48,25 @@ export default function TechStack() {
         </div>
 
         <div className="container relative">
-          <Reveal direction="scale" className="mx-auto mt-24 w-fit pb-16">
+          <Reveal direction="scale" className="mx-auto mt-32 w-fit pb-16">
             <div className="relative grid place-items-center">
               <div
                 aria-hidden="true"
-                className="absolute h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.14),transparent_65%)]"
+                className="absolute h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.16),transparent_65%)]"
               />
               {[0, 1].map((i) => (
                 <motion.span
                   key={i}
                   aria-hidden="true"
                   className="absolute rounded-full border border-white/[0.07]"
-                  style={{ height: 150 + i * 70, width: 150 + i * 70 }}
+                  style={{ height: 250 + i * 80, width: 250 + i * 80 }}
                   animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
                   transition={{ duration: 60 + i * 20, repeat: Infinity, ease: 'linear' }}
                 />
               ))}
-              <div className="relative rounded-full border border-cyan/25 bg-ink-950/90 px-7 py-4 backdrop-blur">
-                <span className="font-display text-[13px] font-semibold uppercase tracking-[0.22em] text-white">
-                  Zynora
-                </span>
-                <span className="mt-1 block text-center text-[9px] uppercase tracking-[0.3em] text-cyan/80">
+              <div className="relative flex flex-col items-center">
+                <Logo3D width={200} />
+                <span className="mt-9 block text-center text-[9px] uppercase tracking-[0.3em] text-cyan/80">
                   Engineering
                 </span>
               </div>

@@ -197,11 +197,13 @@ export default function Navbar() {
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <div className="space-y-1 text-sm text-zinc-500">
-                <p>
-                  <a href={`tel:${company.phoneIntl}`} className="hover:text-white">
-                    {company.phone}
-                  </a>
-                </p>
+                {company.phones.map((p) => (
+                  <p key={p.intl}>
+                    <a href={`tel:${p.intl}`} className="hover:text-white">
+                      {p.display}
+                    </a>
+                  </p>
+                ))}
                 <p>
                   <a href={`mailto:${company.email}`} className="break-all hover:text-white">
                     {company.email}

@@ -175,3 +175,37 @@
     padding-top: 9rem;
   }
 }
+/* Extra room on pages that ask for it (currently Solutions): +24px phone, +32px desktop. */
+.page-top.page-top-roomy > section:first-of-type {
+  padding-top: 8.5rem;
+}
+@media (min-width: 768px) {
+  .page-top.page-top-roomy > section:first-of-type {
+    padding-top: 11rem;
+  }
+}
+
+/* Glossy shine that sweeps across the 3D Zynora logo (components/ui/Logo3D.jsx).
+   The mask clips the shine to the logo's own shape. */
+.logo3d-shine {
+  -webkit-mask: url('/zynora-mark.png') center / 100% 100% no-repeat;
+  mask: url('/zynora-mark.png') center / 100% 100% no-repeat;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.55) 48%,
+    rgba(255, 255, 255, 0.1) 54%,
+    transparent 62%
+  );
+  background-size: 260% 100%;
+  animation: logo3d-shine 4.8s ease-in-out infinite;
+}
+@keyframes logo3d-shine {
+  0% {
+    background-position: 140% 0;
+  }
+  55%,
+  100% {
+    background-position: -40% 0;
+  }
+}

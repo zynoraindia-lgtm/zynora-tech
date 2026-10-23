@@ -13,7 +13,7 @@ export default function Clients() {
     >
       <div className="container relative">
         <SectionHeader
-          eyebrow="Trusted By"
+          eyebrow="Our Valuable Clients"
           align="center"
           title="Businesses We've Built"
           accent="Technology For."

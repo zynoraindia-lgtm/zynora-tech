@@ -69,7 +69,7 @@ const jsonLd = {
   description:
     'Digital engineering and business technology partner delivering websites, mobile applications, e-commerce, ERP, CRM and custom software.',
   email: company.email,
-  telephone: company.phoneIntl,
+  telephone: company.phones.map((p) => p.intl),
   address: {
     '@type': 'PostalAddress',
     streetAddress: `${company.address.line1}, ${company.address.line2}`,

@@ -64,23 +64,24 @@ export default function Contact() {
                 </p>
 
                 <ul className="mt-8 space-y-6">
-                  <li>
-                    <a
-                      href={`tel:${company.phoneIntl}`}
-                      className="group flex items-start gap-3.5"
-                    >
-                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/[0.08] bg-white/[0.02] transition-colors group-hover:border-cyan/30 group-hover:bg-cyan/[0.07]">
-                        <Phone className="h-4 w-4 text-cyan" strokeWidth={1.6} />
+                  <li className="flex items-start gap-3.5">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/[0.08] bg-white/[0.02]">
+                      <Phone className="h-4 w-4 text-cyan" strokeWidth={1.6} />
+                    </span>
+                    <span>
+                      <span className="block text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">
+                        Phone
                       </span>
-                      <span>
-                        <span className="block text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">
-                          Phone
-                        </span>
-                        <span className="mt-1 block text-[15px] text-white transition-colors group-hover:text-cyan">
-                          {company.phone}
-                        </span>
-                      </span>
-                    </a>
+                      {company.phones.map((p) => (
+                        <a
+                          key={p.intl}
+                          href={`tel:${p.intl}`}
+                          className="mt-1 block text-[15px] text-white transition-colors hover:text-cyan"
+                        >
+                          {p.display}
+                        </a>
+                      ))}
+                    </span>
                   </li>
 
                   <li>

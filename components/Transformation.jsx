@@ -53,7 +53,7 @@ export default function Transformation() {
           description="Most businesses do not need more software. They need the systems they already run to talk to each other, and the work in between to stop being manual."
         />
 
-        <div className="relative mt-20">
+        <div className="relative mt-12">
           {/* Flow arrows sitting in the gaps between the three columns */}
           <div aria-hidden="true" className="pointer-events-none hidden lg:block">
             {['left-[33.333%]', 'left-[66.666%]'].map((pos, i) => (
