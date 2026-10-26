@@ -5,7 +5,24 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { process } from '@/lib/site';
 import SectionHeader from './ui/SectionHeader';
 
-export default function Process() {
+const TONES = { 950: 'bg-ink-950', 900: 'bg-ink-900' };
+const COLUMNS = {
+  4: 'lg:grid-cols-4',
+  5: 'lg:grid-cols-5',
+  6: 'lg:grid-cols-6',
+  7: 'lg:grid-cols-7',
+};
+
+/** Delivery timeline. Defaults are the company-wide process (Solutions page); service pages pass their own steps. */
+export default function Process({
+  id = 'process',
+  steps = process,
+  eyebrow = 'Process',
+  title = 'From Idea',
+  accent = 'to Impact.',
+  description = 'A delivery sequence that keeps scope, architecture and expectations visible from the first conversation to long after launch.',
+  tone = '900',
+}) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -15,15 +32,15 @@ export default function Process() {
 
   return (
     <section
-      id="process"
-      className="section overflow-hidden border-t border-white/[0.06] bg-ink-900"
+      id={id}
+      className={`section overflow-hidden border-t border-white/[0.06] ${TONES[tone] || TONES[900]}`}
     >
       <div className="container">
         <SectionHeader
-          eyebrow="Process"
-          title="From Idea"
-          accent="to Impact."
-          description="A delivery sequence that keeps scope, architecture and expectations visible from the first conversation to long after launch."
+          eyebrow={eyebrow}
+          title={title}
+          accent={accent}
+          description={description}
         />
 
         <div ref={ref} className="relative mt-20">
@@ -38,8 +55,8 @@ export default function Process() {
             />
           </div>
 
-          <ol className="relative grid gap-9 lg:grid-cols-7 lg:gap-4">
-            {process.map((step, i) => (
+          <ol className={`relative grid gap-9 lg:gap-4 ${COLUMNS[steps.length] || COLUMNS[7]}`}>
+            {steps.map((step, i) => (
               <motion.li
                 key={step.number}
                 initial={{ opacity: 0, y: 22 }}

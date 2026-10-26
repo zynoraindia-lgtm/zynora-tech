@@ -92,7 +92,7 @@ export default function Services() {
                   </ul>
 
                   <Link
-                    href="/contact"
+                    href={service.href || '/contact'}
                     className="group/cta mt-9 inline-flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-cyan"
                   >
                     {service.cta}

@@ -19,7 +19,7 @@ const columns = [
   },
   {
     title: 'Services',
-    links: services.map((s) => ({ label: s.title, href: `/services#${s.id}` })),
+    links: services.map((s) => ({ label: s.title, href: s.href || `/services#${s.id}` })),
   },
   {
     title: 'Global',

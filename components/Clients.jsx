@@ -5,19 +5,28 @@ import { clients } from '@/lib/site';
 import Reveal, { RevealGroup, RevealItem } from './ui/Reveal';
 import SectionHeader from './ui/SectionHeader';
 
-export default function Clients() {
+const TONES = { 950: 'bg-ink-950', 900: 'bg-ink-900' };
+
+/** Client logo grid. Defaults are the Industries page copy; service pages can pass their own heading. */
+export default function Clients({
+  eyebrow = 'Our Valuable Clients',
+  title = "Businesses We've Built",
+  accent = 'Technology For.',
+  description = 'A sample of the businesses across Tamil Nadu who have trusted Zynora with their websites, applications and digital platforms.',
+  tone = '900',
+}) {
   return (
     <section
       id="clients"
-      className="section overflow-hidden border-t border-white/[0.06] bg-ink-900"
+      className={`section overflow-hidden border-t border-white/[0.06] ${TONES[tone] || TONES[900]}`}
     >
       <div className="container relative">
         <SectionHeader
-          eyebrow="Our Valuable Clients"
+          eyebrow={eyebrow}
           align="center"
-          title="Businesses We've Built"
-          accent="Technology For."
-          description="A sample of the businesses across Tamil Nadu who have trusted Zynora with their websites, applications and digital platforms."
+          title={title}
+          accent={accent}
+          description={description}
         />
 
         <RevealGroup

@@ -47,6 +47,12 @@ Each item in the navigation is its own page (Next.js App Router):
 | `/`           | `app/page.jsx`             | Hero, Explore cards, call-to-action                         |
 | `/about`      | `app/about/page.jsx`       | Why Zynora, Global Presence                                 |
 | `/services`   | `app/services/page.jsx`    | Services (six service blocks), Technology Ecosystem         |
+| `/services/web-development` | `app/services/web-development/page.jsx` | Website Development detail page |
+| `/services/mobile-app-development` | `app/services/mobile-app-development/page.jsx` | Mobile App Development detail page |
+| `/services/ecommerce-development` | `app/services/ecommerce-development/page.jsx` | E-Commerce Development detail page |
+| `/services/erp-solutions` | `app/services/erp-solutions/page.jsx` | ERP Solutions detail page |
+| `/services/crm-solutions` | `app/services/crm-solutions/page.jsx` | CRM Solutions detail page |
+| `/services/custom-software` | `app/services/custom-software/page.jsx` | Custom Software detail page |
 | `/solutions`  | `app/solutions/page.jsx`   | Digital Transformation, Enterprise Engineering, Process     |
 | `/industries` | `app/industries/page.jsx`  | Industries, Our Valuable Clients (client logos), Regional Focus (Middle East) |
 | `/contact`    | `app/contact/page.jsx`     | Contact + enquiry form, FAQ                                 |
@@ -55,6 +61,24 @@ The navbar, footer, cursor glow and opening intro live in `app/layout.jsx`, so t
 by every page. Menu items come from `nav` in `lib/site.js`; the active item is worked out from
 the current URL. The Home page's "Explore" cards read their text from `highlights` in
 `lib/site.js`. Individual services can be linked directly, e.g. `/services#erp`.
+
+### Service detail pages
+
+Every service on `/services` has its own page; its "Explore" button goes to `href` on its entry
+in `services` (`lib/site.js`). All six pages share one template,
+`components/ServiceDetailPage.jsx`: hero, What We Build, Included in Every Build (with the
+"Built With" strip from `techStack`), process, clients, FAQ, other services and a
+call-to-action. Each route file in `app/services/<slug>/page.jsx` is only a few lines that pass
+the service id to that template.
+
+The copy for each page lives in `lib/service-pages.js` (`serviceDetails`, one object per
+service id). Icons are referenced by name there; any new icon name must also be added to the
+icon map in `components/ServiceFeatureGrid.jsx`. `Process`, `Clients`, `FAQ` and `CtaBand` take
+optional props, and their defaults are the copy used elsewhere on the site.
+
+Each page's main button opens `/contact?service=...`, which pre-selects that service in the
+enquiry form (the value comes from `contactService` and must match an entry in
+`serviceOptions`).
 
 ## Editing content
 
@@ -130,6 +154,7 @@ components/
   ui/               Button (magnetic), Reveal, SectionHeader, Counter, CursorGlow
 lib/
   site.js           all site content
+  service-pages.js  copy for the six /services/<slug> detail pages
   worldmap.js       generated land-dot grid (Natural Earth 110m)
   intro.js          intro → hero hand-off (useIntroReady)
 public/

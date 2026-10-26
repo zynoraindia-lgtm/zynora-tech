@@ -5,8 +5,18 @@ import { company } from '@/lib/site';
 import Button from './ui/Button';
 import Reveal from './ui/Reveal';
 
-/** Closing call-to-action on the Home page — sends visitors to the Contact page. */
-export default function CtaBand() {
+/**
+ * Closing call-to-action — sends visitors to the Contact page.
+ * Defaults are the Home page copy; service pages pass their own.
+ */
+export default function CtaBand({
+  eyebrow = 'Start a Conversation',
+  title = 'Have a',
+  accent = 'Business Challenge?',
+  description = "Let's turn your idea, process or challenge into a technology solution.",
+  primaryHref = '/contact',
+  primaryLabel = 'Start a Project',
+}) {
   return (
     <section
       id="get-started"
@@ -24,22 +34,20 @@ export default function CtaBand() {
       <div className="container relative">
         <div className="mx-auto max-w-3xl text-center">
           <Reveal direction="fade">
-            <span className="eyebrow">Start a Conversation</span>
+            <span className="eyebrow">{eyebrow}</span>
           </Reveal>
           <Reveal delay={0.06}>
             <h2 className="h2 mt-6 text-balance">
-              Have a <span className="accent-text">Business Challenge?</span>
+              {title} <span className="accent-text">{accent}</span>
             </h2>
           </Reveal>
           <Reveal delay={0.12}>
-            <p className="lead mx-auto mt-5 max-w-xl">
-              Let&apos;s turn your idea, process or challenge into a technology solution.
-            </p>
+            <p className="lead mx-auto mt-5 max-w-xl">{description}</p>
           </Reveal>
           <Reveal delay={0.18}>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button href="/contact" variant="accent" size="lg">
-                Start a Project
+              <Button href={primaryHref} variant="accent" size="lg">
+                {primaryLabel}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button href={`tel:${company.phoneIntl}`} variant="outline" size="lg">

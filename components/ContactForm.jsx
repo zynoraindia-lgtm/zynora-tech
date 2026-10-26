@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertCircle, Check, Lock, Mail, MessageCircle } from 'lucide-react';
 import {
@@ -34,6 +34,15 @@ export default function ContactForm() {
   const [values, setValues] = useState(INITIAL);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
+
+  // Arriving from a service page (e.g. /contact?service=Website%20Development)
+  // pre-selects that service in the form.
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get('service');
+    if (wanted && serviceOptions.includes(wanted)) {
+      setValues((v) => (v.service ? v : { ...v, service: wanted }));
+    }
+  }, []);
 
   function update(field, value) {
     setValues((v) => ({ ...v, [field]: value }));

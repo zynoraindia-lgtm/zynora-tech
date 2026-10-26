@@ -7,23 +7,36 @@ import { faqs } from '@/lib/site';
 import Reveal from './ui/Reveal';
 import SectionHeader from './ui/SectionHeader';
 
-export default function FAQ() {
+const TONES = { 950: 'bg-ink-950', 900: 'bg-ink-900' };
+
+/** Accordion FAQ. Defaults are the general FAQs (Contact page); service pages pass their own. */
+export default function FAQ({
+  items = faqs,
+  eyebrow = 'FAQ',
+  title = 'Questions,',
+  accent = 'Answered.',
+  description = 'If something here is not covered, send the question through the enquiry form — we answer it directly.',
+  tone = '950',
+}) {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="section border-t border-white/[0.06] bg-ink-950">
+    <section
+      id="faq"
+      className={`section border-t border-white/[0.06] ${TONES[tone] || TONES[950]}`}
+    >
       <div className="container">
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.4fr] lg:gap-20">
           <SectionHeader
-            eyebrow="FAQ"
-            title="Questions,"
-            accent="Answered."
-            description="If something here is not covered, send the question through the enquiry form — we answer it directly."
+            eyebrow={eyebrow}
+            title={title}
+            accent={accent}
+            description={description}
           />
 
           <Reveal direction="left" delay={0.1}>
             <div className="divide-y divide-white/[0.07] border-y border-white/[0.07]">
-              {faqs.map((faq, i) => {
+              {items.map((faq, i) => {
                 const isOpen = open === i;
                 return (
                   <div key={faq.q}>
