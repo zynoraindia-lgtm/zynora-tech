@@ -9,10 +9,33 @@ import FAQ from './FAQ';
 import RelatedServices from './RelatedServices';
 import CtaBand from './CtaBand';
 
-/** Page metadata for a service detail route: `export const metadata = serviceMetadata('web');` */
+/**
+ * Page metadata for a service detail route: `export const metadata = serviceMetadata('web');`
+ * Title, description and keywords are the SEO fields on each page in lib/service-pages.js.
+ */
 export function serviceMetadata(id) {
   const page = serviceDetails[id];
-  return { title: page.metaTitle, description: page.metaDescription };
+  const path = `/services/${page.slug}`;
+  return {
+    // `absolute` skips the layout's "%s | Zynora Technology" template — the SEO title already ends with it.
+    title: { absolute: page.metaTitle },
+    description: page.metaDescription,
+    keywords: page.keywords,
+    alternates: { canonical: path },
+    openGraph: {
+      type: 'website',
+      siteName: company.name,
+      locale: 'en_IN',
+      url: path,
+      title: page.metaTitle,
+      description: page.metaDescription,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.metaTitle,
+      description: page.metaDescription,
+    },
+  };
 }
 
 /**
@@ -32,11 +55,22 @@ export default function ServiceDetailPage({ id }) {
     '@context': 'https://schema.org',
     '@type': 'Service',
     serviceType: service.title,
-    name: `${service.title} — ${company.name}`,
+    name: `${page.hero.title} ${page.hero.accent}`,
     description: page.metaDescription,
     url: `${company.url}/services/${page.slug}`,
     provider: { '@type': 'Organization', name: company.name, url: company.url },
     areaServed: ['AE', 'IN'],
+  };
+
+  // FAQ answers only render when opened, so the full Q&A is also given to search engines here.
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: page.faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
   };
 
   // `page-top` (app/globals.css) sets the gap between the navbar and the first section.
@@ -74,6 +108,10 @@ export default function ServiceDetailPage({ id }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
     </div>
   );

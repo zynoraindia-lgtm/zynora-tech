@@ -175,15 +175,6 @@
     padding-top: 9rem;
   }
 }
-/* Extra room on pages that ask for it (currently Solutions): +24px phone, +32px desktop. */
-.page-top.page-top-roomy > section:first-of-type {
-  padding-top: 8.5rem;
-}
-@media (min-width: 768px) {
-  .page-top.page-top-roomy > section:first-of-type {
-    padding-top: 11rem;
-  }
-}
 
 /* Glossy shine that sweeps across the 3D Zynora logo (components/ui/Logo3D.jsx).
    The mask clips the shine to the logo's own shape. */

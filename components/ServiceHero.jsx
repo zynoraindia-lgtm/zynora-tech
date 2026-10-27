@@ -53,7 +53,7 @@ export default function ServiceHero({ service, hero, contactHref = '/contact' })
 
           <Reveal delay={0.08}>
             <h1 className="mt-5 font-display text-[2.5rem] font-semibold leading-[1.06] text-white sm:text-[3.3rem] lg:text-[3.8rem]">
-              {hero.title}
+              {hero.title}{' '}
               <span className="accent-text block pb-1">{hero.accent}</span>
             </h1>
           </Reveal>
