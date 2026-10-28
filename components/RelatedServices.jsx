@@ -35,7 +35,7 @@ export default function RelatedServices({ currentId, eyebrow, title, accent, des
                   <div className="relative aspect-[16/9] overflow-hidden border-b border-white/[0.06] bg-ink-900">
                     <Image
                       src={s.image}
-                      alt=""
+                      alt={s.imageAlt || s.title}
                       fill
                       sizes="(min-width: 1024px) 260px, (min-width: 640px) 50vw, 100vw"
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
