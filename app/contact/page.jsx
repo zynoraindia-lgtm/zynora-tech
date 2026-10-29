@@ -5,6 +5,7 @@ export const metadata = {
   title: 'Contact',
   description:
     'Talk to Zynora Technology about your project — call, WhatsApp, email or send an enquiry, and find answers to common questions.',
+  alternates: { canonical: '/contact' },
 };
 
 // /contact — `page-top` (app/globals.css) sets the gap between the navbar and the first section.

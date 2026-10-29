@@ -5,6 +5,7 @@ export const metadata = {
   title: 'About',
   description:
     'Why businesses choose Zynora Technology — the working principles behind every engagement and where we work across India and the UAE.',
+  alternates: { canonical: '/about' },
 };
 
 // /about — `page-top` (app/globals.css) sets the gap between the navbar and the first section.

@@ -6,6 +6,7 @@ export const metadata = {
   title: 'Solutions',
   description:
     'From business challenges to digital solutions — how Zynora connects systems, automates manual work and delivers on an architecture built to scale.',
+  alternates: { canonical: '/solutions' },
 };
 
 // /solutions — `page-top` (app/globals.css) sets the gap between the navbar and the first section.
